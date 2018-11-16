@@ -19,7 +19,8 @@ from django.core.exceptions import SuspiciousOperation
 from django.views.decorators.csrf import csrf_exempt
 import json
 
-from .models import Reply
+# 使用する際は以下のコメントアウトを外してください
+# from .models import Reply
 
 # add extra module from here
 import urllib.request
