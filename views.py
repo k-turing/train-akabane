@@ -31,6 +31,69 @@ CALLBACK_WHICH_TRAIN = 'which train?'
 
 # yahoo乗換案内からbs4を使ってスクレイピング
 
+## 以下 train function
+@csrf_exempt
+def train(request):
+    if request.method != 'POST':
+        return JsonResponse({})
+
+    if request.POST.get('token') != VERIFICATION_TOKEN:
+        raise SuspiciousOperation('Invalid request.')
+
+    user_name = request.POST['user_name']
+    user_id = request.POST['user_id']
+
+    result = {
+        'text': '<@{}> which train?'.format(user_id),
+        'response_type': 'in_channel',
+        'attachments' : [
+            {
+                'text': 'Train :',
+                'callback_id' : CALLBACK_WHICH_TRAIN,
+                'fallback': 'fallback',
+                'actions': [
+                    {
+                        'name': 'response',
+                        'type': 'select',
+                        'text': 'Select your response...',
+                        'options': [
+                            {
+                                'text' : '山手線',
+                                'value' : 'yamanote'
+                            },
+                            {
+                                'text' : '京浜東北根岸線',
+                                'value' : 'keihintouhoku'
+                            },
+                            {
+                                'text' : '湘南新宿ライン',
+                                'value' : 'shounann'
+                            },
+                            {
+                                'text' : '東海道本線[東京～熱海]',
+                                'value' : 'toukaidou'
+                            },
+                            {
+                                'text' : '高崎線',
+                                'value' : 'takasaki'
+                            },
+                            {
+                                'text' : '埼京川越線[大崎～川越]',
+                                'value' : 'saikyou'
+                            },
+                            {
+                                'text' : '上野東京ライン',
+                                'value' : 'uenotokyo'
+                            },
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+
+    return JsonResponse(result)
+
 # 以下 reply
 @csrf_exempt
 def reply(request):
