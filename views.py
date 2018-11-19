@@ -238,3 +238,8 @@ def index(request):
 
     }
     return render(request, 'index.html', context)
+
+# 以下 clean
+def clear(request):
+    Reply.objects.all().delete()
+    return HttpResponseRedirect(reverse(index))
